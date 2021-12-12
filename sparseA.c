@@ -35,7 +35,7 @@ int main(){
     }
     int numofzero=0;
     for(i=0;i<n;i++){
-        for(j-0;j<m;j++){
+        for(j=0;j<m;j++){
             if(a[i][j]==0){
                 numofzero++;
             }
@@ -46,7 +46,10 @@ int main(){
     for(i=0;i<=ctr;i++){
         printf("Row: %d        Column: %d     Value: %d    \n",k[i].row,k[i].column,k[i].value);
     }
-   
+    int numofdi=n*m;
     
-    
+   float sparse=numofzero/numofdi;
+   printf("Sparse: %f",sparse);
+   return 0;
+  
 }
