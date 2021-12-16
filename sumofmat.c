@@ -4,107 +4,82 @@ struct matrix{
     int column;
     int value;
 };
-int main(){
-    struct matrix a[30],b[30],res[30];
-    int n,m,i,j,k,c=1;
-    printf("Enter the number of rows: ");
-    scanf("%d",&n);
-    printf("Enter the number of columns: ");
-    scanf("%d",&m);
-    printf("Enter the first matrix: \n");
-    a[0].row=n;
-    a[0].column=m;
-    int ctr=0;
+struct matrix res[30];
+
+int n,m,i,j,k;
+void init(struct matrix a[]){
+    int c=1,ctr=0;
+    printf("Enter the elements: ");
     for(i=0;i<n;i++){
         for(j=0;j<m;j++){
-            printf("Enter the element: ");
             scanf("%d",&k);
             if(k!=0){
                 a[c].row=i;
                 a[c].column=j;
                 a[c].value=k;
-                ctr++;
                 c++;
+                ctr++;
             }
         }
     }
+    a[0].row=n;
+    a[0].column=m;
     a[0].value=ctr;
-    
-    printf("Enter the second matrix: \n");
-    c=1;
-    b[0].row=n;
-    b[0].column=m;
-    ctr=0;
-    for(i=0;i<n;i++){
-        for(j=0;j<m;j++){
-            printf("Enter the element: ");
-            scanf("%d",&k);
-            if(k!=0){
-                b[c].row=i;
-                b[c].column=j;
-                b[c].value=k;
+}
+void printmat(struct matrix a[],int n){
+    for(i=0;i<=n;i++){
+        printf("Row: %d  Column: %d  Value: %d\n",a[i].row,a[i].column,a[i].value);
+    }
+}
+void summat(struct matrix a[],struct matrix b[]){
+    res[0].row=n;
+    res[0].column=m;
+    int ctr=0;
+    int i=1,j=1,k=1;
+    while(i<=a[0].value&&j<=a[0].value){
+        if(a[i].row==b[j].row&&a[i].column==b[j].column){
+            res[k].row=a[i].row;
+            res[k].column=a[i].column;
+            res[k].value=a[i].value+b[j].value;
+            i++;
+            j++;
+            k++;
+            ctr++;
+        }
+        else if(a[i].row==b[j].row){
+            res[k].row=a[i].row;
+            if(a[i].column<b[j].column){
+                res[k].column=a[i].column;
+                res[k].value=a[i].value;
+                i++;
+                k++;
                 ctr++;
-                c++;
+                
+            }
+            else{
+                res[k].column=b[j].column;
+                res[k].value=b[j].value;
+                j++;
+                k++;
+                ctr++;
             }
         }
+        
     }
-    b[0].value=ctr;
-    printf("First matrix: \n");
-    for(i=0;i<=a[0].value;i++){
-        printf("Row: %d   Column: %d    Value: %d   \n",a[i].row,a[i].column,a[i].value);
-    }
-    printf("Second matrix: \n");
-    for(i=0;i<=b[0].value;i++){
-        printf("Row: %d   Column: %d    Value: %d   \n",b[i].row,b[i].column,b[i].value);
-    }
-    c=1;
-    ctr=0;
-   for(i=1;i<=a[0].value;i++){
-       for(j=1;j<=b[0].value;j++){
-           if(a[i].row==b[j].row&&a[i].column==b[j].column){
-             res[c].row=a[i].row;
-             res[c].column=a[i].column;
-             res[c].value=a[i].value+b[j].value;
-             c++;
-             ctr++;
-           }
-           else if(a[i].row==b[j].row&&a[i].column!=b[j].column){
-               res[c].row=a[i].row;
-               if(a[i].column<b[j].column){
-                   res[c].column=a[i].column;
-                   res[c].value=a[i].value;
-                   c++;
-                   ctr++;
-               }
-               else{
-                   res[c].column=b[j].column;
-                   res[c].value=b[j].value;
-                   c++;
-                   ctr++;
-               }
-           }
-           else if(a[i].row!=b[j].row&&a[i].column==b[j].column){
-               res[c].column=b[j].column;
-               if(a[i].row<b[j].row){
-                   res[c].row=a[i].row;
-                   res[c].value=a[i].value;
-                   c++;
-                   ctr++;
-               }
-               else{
-                   res[c].row=b[j].row;
-                   res[c].value=b[j].value;
-                   c++;
-                   ctr++;
-               }
-           }
-           
-       }
-   } 
-   res[0].value=ctr;
-   printf("resultant matrix: \n");
-    for(i=1;i<=res[0].value;i++){
-        printf("Row: %d   Column: %d    Value: %d   \n",res[i].row,res[i].column,res[i].value);
-    }
-   
+    res[0].value=ctr;
+}
+int main(){
+    struct matrix a[30],b[30];
+    printf("Enter the number of rows and columns of matrices: ");
+    scanf("%d%d",&n,&m);
+    init(a);
+    init(b);
+    printf("New representation of First: \n");
+    printmat(a,a[0].value);
+    printf("New representation of Second: \n");
+    printmat(b,b[0].value);
+    summat(a,b);
+    printf("Result:\n");
+    printmat(res,res[0].value);
+    
 }
