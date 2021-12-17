@@ -1,85 +1,219 @@
-#include<stdio.h>
-struct matrix{
+
+
+#include <stdio.h>
+#define MAX_TERMS 100
+
+struct Sparse_matrix
+{
     int row;
-    int column;
+    int col;
     int value;
 };
-struct matrix res[30];
 
-int n,m,i,j,k;
-void init(struct matrix a[]){
-    int c=1,ctr=0;
-    printf("Enter the elements: ");
-    for(i=0;i<n;i++){
-        for(j=0;j<m;j++){
-            scanf("%d",&k);
-            if(k!=0){
-                a[c].row=i;
-                a[c].column=j;
-                a[c].value=k;
-                c++;
-                ctr++;
+//SPARSE MATRIX STRUCTURE AND SIZE
+struct Sparse_matrix sparse1[MAX_TERMS];
+struct Sparse_matrix sparse2[MAX_TERMS];
+int SIZE1, SIZE2;
+
+//SUM MATRIX STRUCTURE AND SIZE
+struct Sparse_matrix sparseSum[MAX_TERMS];
+int SUM_SIZE;
+
+//SIZE OF ROWS AND COLS OF INPUT MATRIX & RESULT MATRIX
+const int MATRIX_ROWS, MATRIX_COLS;
+int matrix1[100][100], matrix2[100][100], matrixSum[100][100];
+
+//FUNCTION TO PRINT 2D MATRIX (NORMAL FORM)
+void printMatrix(int matrix[100][100])
+{
+    int i, j;
+    for (i = 0; i < MATRIX_ROWS; i++)
+    {
+        for (j = 0; j < MATRIX_COLS; j++)
+        {
+            printf("%4d", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+//FUNCTION TO PRINT SPARSE MATRIX (TUPLE FORM)
+void printSparseMatrix(struct Sparse_matrix sparse[100], int size)
+{
+    int i;
+    printf("\n");
+    printf("ROW  COLUMN  VALUE");
+    for (i = 0; i < size; i++)
+    {
+        printf("\n");
+        printf("%d\t%d\t%d", sparse[i].row, sparse[i].col, sparse[i].value);
+    }
+}
+
+//CONVERT NORMAL MATRIX1 and MATRIX2 TO SPARSE MATRIX
+void convertToSparseMatrix()
+{
+    //FIRST ROW IS META-DATA: < no.of rows, no.of cols, no.of non-zero entries >
+    sparse1[0].row = sparse2[0].row = MATRIX_ROWS;
+    sparse1[0].col = sparse2[0].col = MATRIX_COLS;
+    int i, j, k1 = 1, k2 = 1;
+    for (i = 0; i < MATRIX_ROWS; i++)
+    {
+        for (j = 0; j < MATRIX_COLS; j++)
+        {
+            if (matrix1[i][j])
+            {
+                sparse1[k1].row = i + 1;
+                sparse1[k1].col = j + 1;
+                sparse1[k1].value = matrix1[i][j];
+                k1++;
+            }
+            if (matrix2[i][j])
+            {
+                sparse2[k2].row = i + 1;
+                sparse2[k2].col = j + 1;
+                sparse2[k2].value = matrix2[i][j];
+                k2++;
             }
         }
     }
-    a[0].row=n;
-    a[0].column=m;
-    a[0].value=ctr;
+    SIZE1 = k1;
+    sparse1[0].value = k1 - 1;
+    SIZE2 = k2;
+    sparse2[0].value = k2 - 1;
 }
-void printmat(struct matrix a[],int n){
-    for(i=0;i<=n;i++){
-        printf("Row: %d  Column: %d  Value: %d\n",a[i].row,a[i].column,a[i].value);
-    }
-}
-void summat(struct matrix a[],struct matrix b[]){
-    res[0].row=n;
-    res[0].column=m;
-    int ctr=0;
-    int i=1,j=1,k=1;
-    while(i<=a[0].value&&j<=a[0].value){
-        if(a[i].row==b[j].row&&a[i].column==b[j].column){
-            res[k].row=a[i].row;
-            res[k].column=a[i].column;
-            res[k].value=a[i].value+b[j].value;
+
+//FUNCTION TO CALCULATE SUM
+void CalculateSum()
+{
+    //FIRST ROW IS META-DATA: < no.of rows, no.of cols, no.of non-zero entries >
+    sparseSum[0].row = sparse1[0].row;
+    sparseSum[0].col = sparse1[0].col;
+    int i = 1, j = 1, k = 1;
+    while (i < SIZE1 && j < SIZE2)
+    {
+        if (sparse1[i].row == sparse2[j].row && sparse1[i].col == sparse2[j].col) //IF SAME ROW & COL, ADD VALUES
+        {
+            sparseSum[k].row = sparse1[i].row;
+            sparseSum[k].col = sparse1[i].col;
+            sparseSum[k].value = sparse1[i].value + sparse2[j].value;
             i++;
             j++;
-            k++;
-            ctr++;
         }
-        else if(a[i].row==b[j].row){
-            res[k].row=a[i].row;
-            if(a[i].column<b[j].column){
-                res[k].column=a[i].column;
-                res[k].value=a[i].value;
+        else if (sparse1[i].row == sparse2[j].row) //IF ROWS ARE SAME
+        {
+            sparseSum[k].row = sparse1[i].row;
+            if (sparse1[i].col < sparse2[j].col && i < SIZE1) //IF COL1 < COL2
+            {
+                sparseSum[k].col = sparse1[i].col;
+                sparseSum[k].value = sparse1[i].value;
                 i++;
-                k++;
-                ctr++;
-                
             }
-            else{
-                res[k].column=b[j].column;
-                res[k].value=b[j].value;
+            else //IF COL2 < COL1
+            {
+                sparseSum[k].col = sparse2[j].col;
+                sparseSum[k].value = sparse2[j].value;
                 j++;
-                k++;
-                ctr++;
             }
         }
-        
+        else //IF ROWS ARE NOT SAME
+        {
+            if (sparse1[i].row < sparse2[j].row) //IF ROW1 < ROW2
+            {
+                sparseSum[k].row = sparse1[i].row;
+                sparseSum[k].col = sparse1[i].col;
+                sparseSum[k].value = sparse1[i].value;
+                i++;
+            }
+            else //IF ROW2 < ROW1
+            {
+                sparseSum[k].row = sparse2[j].row;
+                sparseSum[k].col = sparse2[j].col;
+                sparseSum[k].value = sparse2[j].value;
+                j++;
+            }
+        }
+        k++;
     }
-    res[0].value=ctr;
+    while (i < SIZE1) //THIS LOOP IS TO FILL UP REMAINING ELEMENTS IN SPARSE1
+    {
+        sparseSum[k].row = sparse1[i].row;
+        sparseSum[k].col = sparse1[i].col;
+        sparseSum[k].value = sparse1[i].value;
+        k++;
+        i++;
+    }
+    while (j < SIZE2) //THIS LOOP IS TO FILL UP REMAINING ELEMENTS IN SPARSE2
+    {
+        sparseSum[k].row = sparse2[j].row;
+        sparseSum[k].col = sparse2[j].col;
+        sparseSum[k].value = sparse2[j].value;
+        k++;
+        j++;
+    }
+    SUM_SIZE = k;
+    sparseSum[0].value = k - 1;
 }
-int main(){
-    struct matrix a[30],b[30];
-    printf("Enter the number of rows and columns of matrices: ");
-    scanf("%d%d",&n,&m);
-    init(a);
-    init(b);
-    printf("New representation of First: \n");
-    printmat(a,a[0].value);
-    printf("New representation of Second: \n");
-    printmat(b,b[0].value);
-    summat(a,b);
-    printf("Result:\n");
-    printmat(res,res[0].value);
-    
+
+//CONVERT TUPLE FORM BACK TO 2D MATRIX
+void convertSparseToNormal()
+{
+    int i, j;
+    //INITILIAZE SUM MATRIX WITH ALL ELEMENTS 0
+    for (i = 0; i < MATRIX_COLS; i++)
+        for (j = 0; j < MATRIX_ROWS; j++)
+            matrixSum[i][j] = 0;
+
+    for (i = 1; i < SUM_SIZE; i++)
+    {
+        matrixSum[sparseSum[i].row - 1][sparseSum[i].col - 1] = sparseSum[i].value;
+    }
+}
+
+int main()
+{
+    int i, j, row2, col2;
+    printf("\nEnter Dimensions of matrix 1\n");
+    scanf("%d%d", &MATRIX_ROWS, &MATRIX_COLS);
+    printf("\nEnter Elements of matrix 1\n");
+    for (i = 0; i < MATRIX_ROWS; i++)
+        for (j = 0; j < MATRIX_COLS; j++)
+            scanf("%d", &matrix1[i][j]);
+
+    printf("\nEnter Dimensions of matrix 2\n");
+    scanf("%d%d", &row2, &col2);
+    if (row2 != MATRIX_ROWS || col2 != MATRIX_COLS)
+    {
+        printf("\nInvalid dimensions for addition\n");
+        return 0;
+    }
+    printf("\nEnter Elements of matrix 2\n");
+    for (i = 0; i < MATRIX_ROWS; i++)
+        for (j = 0; j < MATRIX_COLS; j++)
+            scanf("%d", &matrix2[i][j]);
+
+    printf("\nEntered matrix 1\n");
+    printMatrix(matrix1);
+    printf("\nEntered matrix 2\n");
+    printMatrix(matrix2);
+
+    convertToSparseMatrix();
+
+    printf("\nSparse Matrix 1 (Tuple form)");
+    printSparseMatrix(sparse1, SIZE1);
+    printf("\n\nSparse Matrix 2 (Tuple form)");
+    printSparseMatrix(sparse2, SIZE2);
+
+    CalculateSum();
+
+    printf("\n\nSum of Sparse Matrices (Tuple form)");
+    printSparseMatrix(sparseSum, SUM_SIZE);
+
+    convertSparseToNormal();
+    printf("\n\nSum of matrices (Normal form)\n");
+    printMatrix(matrixSum);
+
+
+
+    return 0;
 }
