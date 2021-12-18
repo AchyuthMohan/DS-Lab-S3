@@ -47,7 +47,7 @@ int pop2 ()
 {
   if (top2 < size)
     {
-      return array[top2--];
+      return array[top2++];
     }
   else
     {
