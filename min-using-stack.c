@@ -1,32 +1,72 @@
 #include<stdio.h>
-#define size 100
-int a[size],top=-1,min,count=0;
-void push(int item){
-    if(top>=size-1){
+#define size 30
+int stack1[size],stack2[size];
+int top1=-1,top2=-1;
+int ctr=0;
+void push1(int item){
+    if(top1>=size-1){
         printf("Stack overflow..");
         
     }
     else{
-        top++;
-        a[top]=item;
+        top1++;
+        stack1[top1]=item;
     }
 }
-int pop(){
-    if(top>-1){
-        return a[top];
+
+void push2(int item){
+    if(top2>=size-1){
+        printf("Stack overflow...");
+    }
+    else{
+        top2++;
+        stack2[top2]=item;
+    }
+}
+int peek2(){
+    if(top2!=-1){
+        return stack2[top2];
+    }
+    else{
+        printf("Stack empty");
+    }
+}
+int peek1(){
+    if(top1!=-1){
+        return stack1[top1];
+    }
+    else{
+        printf("Stack empty");
+    }
+}
+int pop1(){
+    if(top1==-1){
+        printf("Stack empty...");
+    }
+    else{
+        return stack1[top1];
+        top1--;
+    }
+}
+
+
+int pop2(){
+    if(top2==-1){
+        printf("Stack empty");
         
     }
     else{
-        printf("stack underflow...");
+        return stack2[top2];
+        top2--;
     }
 }
-int minimum(int a[]){
-    min=a[top];
+int minim(int stack2[]){
+    int min=stack2[top2];
     int temp;
     int i;
-    int k = top;
-    for(i=0;i<count;i++,k--){
-        temp=a[k];
+    int k = top2;
+    for(i=0;i<ctr;i++,k--){
+        temp=stack2[k];
         if(temp<min){
             min=temp;
         }
@@ -34,47 +74,48 @@ int minimum(int a[]){
     return min;
     
 }
-
 int main(){
-    int limit,flag=0,ch,i,item;
+    
+    int ch,flag=0;
+   
     while(flag==0){
-        printf("\n1.push\n2.pop\n3.minimum\n4.exit");
-        scanf("%d",&ch);
+        printf("1.Push\n2.pop.\n3.Minimum.\nEnter the choice..");
+         scanf("%d",&ch);
         switch(ch){
-            case 1:{
-                printf("Number of elements to be pushed: ");
-                int t;
-                scanf("%d",&t);
-                for(i=0;i<t;i++){
-                    printf("Enter teh element to be pushed: ");
-                    scanf("%d",&item);
-                    push(item);
-                    count++;
-                    
-                }
-                break;
-            }
-            case 2:{
-                printf("Enter the number of times popping to be done: ");
-                int t;
-                scanf("%d",&t);
-                for(i=0;i<t;i++){
-                    item=pop();
-                    count--;
-                    printf("Element popped: %d",item);
-                }
+        case 1:{
+            printf("Enter the element to be pushed..");
+            int item;
+            scanf("%d",&item);
+            push1(item);
+            push2(item);
+            ctr++;
+            break;
+        }
+        case 2:{
+            printf("Enter the number of times popping to be done: ");
+            int i,n;
+            scanf("%d",&n);
+            printf("Popped elements: ");
+            for(i=0;i<n;i++){
+                int temp=pop1();
+                ctr--;
+                pop2();
+                printf("%d\t",temp);
                 
             }
-            case 3:{
-                 minimum(a);
-                printf("Minimum: %d",min);
-                break;
-                
-                
-            }
-            case 4:{
-                flag=1;
-            }
+            
+        }
+        case 3:{
+           int min=minim(stack2);
+           printf("%d\n",min);
+           flag=1;
+            
+            break;
+            
         }
     }
+    
+    }
+    return 0;
+    
 }
