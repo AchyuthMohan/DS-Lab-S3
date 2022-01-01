@@ -10,8 +10,7 @@ void push(char ch){
 char pop(){
    if(top!=-1){
        return stack[top];
-       top--;
-   }
+      }
     
 }
 int main(){
@@ -26,12 +25,10 @@ int main(){
         push(str[i]);
     }
    
+   
     for(i=0;i<n;i++){
         temp=pop();
-        printf("%c\t",temp);
-    }
-    for(i=0;i<n;i++){
-        temp=pop();
+        top--;
         if(temp!=str[i]){
             flag=1;
             break;
