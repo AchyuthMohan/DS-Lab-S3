@@ -1,41 +1,47 @@
 #include<stdio.h>
-#include<string.h>
 #define size 20
+#include<string.h>
 char stack[size];
 int top=-1;
-void push(char item){
-    if(top>=size-1){
-        printf("Overflow");
-    }
-    else{
-        top++;
-        stack[top]=item;
-    }
+void push(char ch){
+   top++;
+   stack[top]=ch;
 }
 char pop(){
-    if(top==-1){
-        printf("Underflow...");
-    }
-    else{
-        return stack[top];
-        top--;
-    }
+   if(top!=-1){
+       return stack[top];
+       top--;
+   }
+    
 }
 int main(){
-    char str[size],str2[size];
-    printf("Enter the string");
-    scanf("%c",&str);
-    
-    int n=strlen(str);
-    int i;
+    char str[size],temp;
+    int i,n,flag=0,ctr=1;
+    printf("Enter the string..");
+    scanf("%s",str);
+    n=strlen(str);
+   
     for(i=0;i<n;i++){
+        
         push(str[i]);
-         }
+    }
+   
     for(i=0;i<n;i++){
-        str2[i]=pop();
+        temp=pop();
+        printf("%c\t",temp);
     }
-    if(strcmpi(str,str2)==0){
-        printf("Palin");
+    for(i=0;i<n;i++){
+        temp=pop();
+        if(temp!=str[i]){
+            flag=1;
+            break;
+        }
     }
-return 0;
+    if(flag==0){
+        printf("Palindrome");
+    }
+    else{
+        printf(" Not a palindrome");
+    }
+    
 }
