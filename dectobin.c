@@ -6,6 +6,7 @@ int isEmpty(int top, int stack_arr[]);
 void push(int x, int *top, int stack_arr[]);
 int pop(int *top, int stack_arr[]);
 void DecToBin(int num);
+void DectoHex(int num);
 
 int main()
 {
@@ -14,10 +15,12 @@ int main()
         scanf("%d",&num);
         printf("Binary Equivalent is : ");
         DecToBin(num);
+        printf("\nHexadecimal Equivalent is : ");
+        DectoHex(num);
 
         return 0;
 
-}/*End of main()*/
+}
 
 void DecToBin(int num)
 {
@@ -27,6 +30,19 @@ void DecToBin(int num)
                 rem = num%2;
                 push(rem, &top, stack);
                 num/=2;
+        }
+        while(top!=-1)
+                printf("%d", pop(&top, stack));
+        printf("\n");
+}
+void DectoHex(int num)
+{
+        int stack[MAX],top=-1, rem;
+        while(num!=0)
+        {
+                rem = num%16;
+                push(rem,&top,stack);
+                num/=16;
         }
         while(top!=-1)
                 printf("%d", pop(&top, stack));
@@ -43,7 +59,7 @@ void push(int x, int *top, int stack_arr[])
                 *top=*top+1;
                 stack_arr[*top] = x;
         }
-}/*End of push()*/
+}
 
 int pop(int *top, int stack_arr[])
 {
@@ -59,4 +75,4 @@ int pop(int *top, int stack_arr[])
                 *top=*top-1;
         }
         return x;
-}/*End of pop()*/
+}
