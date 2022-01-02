@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 50
-int isEmpty(int top, int stack_arr[]);
 void push(int x, int *top, int stack_arr[]);
 int pop(int *top, int stack_arr[]);
 void DecToBin(int num);
