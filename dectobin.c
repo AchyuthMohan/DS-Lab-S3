@@ -1,59 +1,12 @@
 #include<stdio.h>
+#define size 50
 #include<stdlib.h>
-#define MAX 50
-void push(int x, int *top, int stack_arr[]);
-int pop(int *top, int stack_arr[]);
-void DecToBin(int num);
-void DectoHex(int num);
-int main()
-{       int num;
-        printf("Enter an integer : ");
-        scanf("%d",&num);
-        printf("Binary Equivalent is : ");
-        DecToBin(num);
-        printf("\nHexadecimal Equivalent is : ");
-        DectoHex(num);
-        return 0;
+void push(int x,int *top,int stack_arr[]){
+    *top=*top+1;
+    stack_arr[*top]=x;
 }
-void DecToBin(int num)
-{
-        int stack[MAX], top=-1, rem;
-        while(num!=0)
-        {
-                rem = num%2;
-                push(rem, &top, stack);
-                num/=2;
-        }
-        while(top!=-1)
-                printf("%d", pop(&top, stack));
-        printf("\n");
-}
-void DectoHex(int num)
-{
-        int stack[MAX],top=-1, rem;
-        while(num!=0)
-        {
-                rem = num%16;
-                push(rem,&top,stack);
-                num/=16;
-        }
-        while(top!=-1)
-                printf("%d", pop(&top, stack));
-        printf("\n");
-}
-void push(int x, int *top, int stack_arr[])
-{
-        if(*top == (MAX-1))
-                printf("Stack Overflow\n");
-        else
-        {
-                *top=*top+1;
-                stack_arr[*top] = x;
-        }
-}
-int pop(int *top, int stack_arr[])
-{
-        int x;
+int pop(int *top,int stack_arr[]){
+    int x;
         if(*top == -1)
         {
                 printf("Stack Underflow\n");
@@ -65,4 +18,63 @@ int pop(int *top, int stack_arr[])
                 *top=*top-1;
         }
         return x;
+}
+void dectobin(int num){
+    int top=-1,stack[size],rem;
+    while(num!=0){
+        rem=num%2;
+        push(rem,&top,stack);
+        num=num/2;
+    }
+    while(top!=-1){
+        printf("%d",pop(&top,stack));
+    }
+    printf("\n");
+}
+void dectohex(int num){
+    int top=-1,stack[size],rem;
+    while(num!=0){
+        rem=num%16;
+        push(rem,&top,stack);
+        num=num/16;
+    }
+    while(top!=-1){
+        int temp=pop(&top,stack);
+        if(temp>=10&&temp<=15){
+            if(temp==10){
+                printf("A");
+            }
+            else if(temp==11){
+                printf("B");
+            }
+            else if(temp==12){
+                printf("C");
+            }
+            else if(temp==13){
+                printf("D");
+            }
+            else if(temp==14){
+                printf("E");
+            }
+            else{
+                printf("F");
+            }
+        }
+        else{
+            printf("%d",temp);
+        }
+        
+    }
+    printf("\n");
+}
+int main(){
+    printf("enter the number: ");
+    int n;
+    scanf("%d",&n);
+    printf("binary: ");
+    dectobin(n);
+    printf("\n");
+    printf("Hex: ");
+    dectohex(n);
+    return 0;
 }
