@@ -76,8 +76,8 @@ void displayList()
         tmp = stnode;
         while(tmp != NULL)
         {
-            printf(" Data = %d\n", tmp->num);       // prints the data of current node
-            tmp = tmp->nextptr;                     // advances the position of current node
+            printf(" Data = %d\n", tmp->num);       
+            tmp = tmp->nextptr;                     
         }
     }
 } 
