@@ -3,18 +3,17 @@
 
 struct node 
 {
-    int num;                        //Data of the node
-    struct node *nextptr;           //Address of the next node
+    int num;                        
+    struct node *nextptr;           
 }*stnode;
 
-void createNodeList(int n); // function to create the list
-void displayList();         // function to display the list
-
+void createNodeList(int n);
+void displayList();        
 int main()
 {
     int n;
 		printf("\n\n Linked List : To create and display Singly Linked List :\n");
-		printf("-------------------------------------------------------------\n");
+		
 		
     printf(" Input the number of nodes : ");
     scanf("%d", &n);
@@ -29,20 +28,20 @@ void createNodeList(int n)
     int num, i;
     stnode = (struct node *)malloc(sizeof(struct node));
 
-    if(stnode == NULL) //check whether the fnnode is NULL and if so no memory allocation
+    if(stnode == NULL) 
     {
         printf(" Memory can not be allocated.");
     }
     else
     {
-// reads data for the node through keyboard
+
 
         printf(" Input data for node 1 : ");
         scanf("%d", &num);
         stnode->num = num;      
-        stnode->nextptr = NULL; // links the address field to NULL
+        stnode->nextptr = NULL; 
         tmp = stnode;
-// Creating n nodes and adding to linked list
+
         for(i=2; i<=n; i++)
         {
             fnNode = (struct node *)malloc(sizeof(struct node));
