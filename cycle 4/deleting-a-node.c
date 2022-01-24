@@ -80,11 +80,34 @@ void delete(int item){
     }
 }
 int main(){
-    add(1);
-    add(2);
-    add(3);
-
-    display();
-    delete(2);
-    display();
+    int ch;
+    int state=0;
+    while(state==0){
+        printf("1. add 2. delete 3 display 4 exit");
+        scanf("%d",&ch);
+        switch(ch){
+            case 1:{
+                printf("enter the data to be added: ");
+                int item;
+                scanf("%d",&item);
+                add(item);
+                break;
+            }
+            case 2:{
+                printf("Enter the element to be deleted: ");
+                int item;
+                scanf("%d",&item);
+                delete(item);
+                break;
+            }
+            case 3:{
+                display();
+                break;
+            }
+            case 4:{
+                state=1;
+                break;
+            }
+        }
+    }
 }
