@@ -80,11 +80,12 @@ void delete(int item){
 }
 int small(){
     temp=head;
-    int smaller=head->data;
+    int smaller=temp->data;
     while(temp!=NULL){
         if(temp->data<(smaller)){
             smaller=temp->data;
         }
+        temp=temp->next;
     }
     return smaller;
 }
@@ -110,7 +111,8 @@ int main(){
             }
             case 2:{
                 int s=small();
-                printf("%d",s);
+                // printf("%d",s);
+                deletesmall();
                 break;
             }
             case 3:{
