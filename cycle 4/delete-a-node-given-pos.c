@@ -52,23 +52,48 @@ int counter(){
     return ctr;
 }
 void delete(int pos){
-    temp=head;
-    struct node *nextnode;
-    int i=1;
-    if(pos>counter()){
-        printf("not possible..");
-
+     if(pos<1)
+    {
+        printf("INVALID, Index should start from 1\n");
     }
-    else{
-        while(i<pos-1){
-        temp=temp->next;
-        i++;
-
+    else if(pos == 1)
+    {
+        if(head == NULL)
+        {
+            printf("Sorry, List Empty, cannot delete position %d",pos);
+        }
+        else
+        {
+            struct node *del = head;
+            head = head->next;
+            free(del);
+            printf("Element at position %d Deleted. \n",pos);
+        }
     }
-    nextnode=temp->next;
-    temp->next=nextnode->next;
-    free(nextnode);
-    printf("Element deleted");
+    else
+    {
+       
+        int elemNum = 1;
+        struct node *temp = head;
+
+        while(temp!=NULL && elemNum<pos-1)
+        {
+            temp = temp->next;
+            elemNum++;
+        }
+      
+        if(temp==NULL){elemNum--;}
+        else {;}
+
+        if(temp == NULL || temp->next == NULL)
+            printf("Sorry, There are only %d nodes in the list", elemNum);
+        else
+        {   
+            struct node *del = temp->next;
+            temp->next = temp->next->next;
+            free(del);
+            printf("Element Deleted at position %d. \n",pos);
+        }
     }
     
 }
@@ -90,6 +115,7 @@ int main(){
                 printf("Enter the position to be deleted: ");
                 scanf("%d",&pos);
                 delete(pos);
+                break;
             }
             case 3:{
                 display();
