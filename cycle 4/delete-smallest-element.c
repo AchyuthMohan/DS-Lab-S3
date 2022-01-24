@@ -80,9 +80,9 @@ void delete(int item){
 }
 int small(){
     temp=head;
-    int smaller=temp->data;
+    int smaller=head->data;
     while(temp!=NULL){
-        if(temp->data<smaller){
+        if(temp->data<(smaller)){
             smaller=temp->data;
         }
     }
@@ -98,7 +98,7 @@ int main(){
     int ch;
     int state=0;
     while(state==0){
-        printf("1. add 2. delete small 3 display 4 exit");
+        printf("1. add 2.  small 3 display 4 exit");
         scanf("%d",&ch);
         switch(ch){
             case 1:{
@@ -109,7 +109,8 @@ int main(){
                 break;
             }
             case 2:{
-                deletesmall();
+                int s=small();
+                printf("%d",s);
                 break;
             }
             case 3:{
