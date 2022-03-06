@@ -1,73 +1,104 @@
-#include<stdio.h>
-#include<limits.h>
-#define MAX 100
-int idx = -1;
-int pqVal[MAX];
-int pqPriority[MAX];
-int isEmpty(){
-    return idx == -1;
-}
+#include <stdio.h>
+#include <stdlib.h>
 
-int isFull(){
-    return idx == MAX - 1;
-}
-void enqueue(int data, int priority)
+struct node {
+    int data;
+    struct node* next;
+};
+struct node *rear = NULL;
+
+struct node* createNode(int data)
 {
-    if(!isFull()){
-        idx++;
-        pqVal[idx] = data;
-        pqPriority[idx] = priority;
-    }
-}
-int peek()
-{
-    int maxPriority = INT_MIN;
-    int indexPos = -1;
-    for (int i = 0; i <= idx; i++) { 
-        if (maxPriority == pqPriority[i] && indexPos > -1 && pqVal[indexPos] < pqVal[i]) 
-        {
-            maxPriority = pqPriority[i];
-            indexPos = i;
-        }
-        else if (maxPriority < pqPriority[i]) {
-            maxPriority = pqPriority[i];
-            indexPos = i;
-        }
-    }
-    return indexPos;
-}
-void dequeue()
-{
-    if(!isEmpty())
+    struct node* newNode = (struct node*)malloc((sizeof(struct node)));
+    if(newNode == NULL)
     {
-        int indexPos = peek();
-        for (int i = indexPos; i < idx; i++) {
-            pqVal[i] = pqVal[i + 1];
-            pqPriority[i] = pqPriority[i + 1];
-        }
-        idx--;
+        printf("Sorry there was an error\n Aborting\n");
+        exit(0);
+    }
+    newNode->next = NULL;
+    newNode->data = data;
+    return(newNode);
+}
+
+void push(int data)
+{
+    struct node *newNode = createNode(data);
+    if(rear == NULL)
+    {
+		rear  = newNode;
+		rear->next = rear;
+    }
+    else
+    {
+		newNode->next = rear->next;
+		rear->next = newNode;
+		rear = newNode;
+    }
+    printf("Pushed: %d\n", rear->data);
+}
+
+void peek()
+{
+    if(rear == NULL)
+        printf("\n Queue Empty");
+    else
+    {
+        printf("\n Front: %d", rear->next->data);
+    }
+    printf("\n");
+}
+
+void pop()
+{
+    if(rear == NULL)
+    {
+        printf("\n Queue Empty\n");
+    }
+    else
+    {
+    	printf("Popped: %d\n", rear->next->data);
+    	struct node* temp = rear->next;
+    	if(rear == rear->next)
+    		rear = NULL;
+		else
+		{
+			rear->next = rear->next->next;
+		}
+		free(temp);	
     }
 }
 
-void display(){
-    for (int i = 0; i <= idx; i++) {
-        printf("(%d, %d)\n",pqVal[i], pqPriority[i]);
-    } 
-}
 int main()
 {
-    enqueue(5, 1);
-    enqueue(10, 3);
-    enqueue(15, 4);
-    enqueue(20, 5);
-    enqueue(500, 2);
-    
-    printf("Before Dequeue : \n");
-    display();
-    dequeue(); 
-    dequeue(); 
-    printf("\nAfter Dequeue : \n");
-    display();
-
+    int choice;
+    do
+    {
+        int data;
+        printf("1: Push\n");
+        printf("2: Peek\n");
+        printf("3: Pop\n");
+        printf("4: Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d",&data);
+                push(data);
+                break;
+            case 2:
+                peek();
+                break;
+            case 3:
+                pop();
+                break;
+            case 4:
+                break;
+            default:
+                printf("Invalid Choice\n");
+                break;
+        };
+    }while(choice != 4);
     return 0;
 }
