@@ -3,31 +3,28 @@
 #define n 34
 char stack[n];
 int top=-1;
+char postfix[n];
+
 void push(char ch){
     if(top==n-1){
         printf("Full");
+
     }
-   else if(top==-1){
-       top++;
-       stack[top]=ch;
-   }
-   else{
-       while(precedence(stack[top])>=precedence(ch)){
-           char temp=pop();
-           printf("%c",temp);
-       }
-       top++;
-       stack[top]=ch;
-   }
+    else{
+        top++;
+        stack[top]=ch;
+    }
 }
 char pop(){
     if(top==-1){
         printf("Empty");
     }
     else{
-        return stack[top--];
+       char item=stack[top];
+       top--;
+       return item;
     }
-    return 'a';
+    
 }
 int isoperator(char ch){
     if(ch=='^'||ch=='*'||ch=='/'||ch=='+'||ch=='-'){
@@ -57,17 +54,39 @@ char peek(){
         return stack[top];
     }
 }
+void infixToPostfix(char str[]){
+    int m=strlen(str);
+    int c=0;
+    for(int i=0;i<m;i++){
+        if(isoperator(str[i])==0){
+            postfix[c]=str[i];
+            c++;
+
+        }
+        else{
+            while(precedence(peek())>=str[i]){
+                char p=pop();
+                postfix[c]=p;
+                c++;
+            }
+            push(str[i]);
+        }
+    }
+}
 int main(){
     char str[20];
     printf("Enter the infix expression: ");
     scanf("%s",&str);
-    for(int i=0;i<strlen(str);i++){
-        if(isoperator(str[i])==1){
-            push(str[i]);
-        }
-        else{
-            printf("%c",str[i]);
-        }
-    }
+    infixToPostfix(str);
+    puts(postfix);
+    
+    // for(int i=0;i<strlen(str);i++){
+    //     if(isoperator(str[i])==1){
+    //         push(str[i]);
+    //     }
+    //     else{
+    //         printf("%c",str[i]);
+    //     }
+    // }
     
 }
