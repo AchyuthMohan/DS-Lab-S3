@@ -16,14 +16,14 @@ void push(char ch){
     }
 }
 char pop(){
-    if(top==-1){
-        printf("Empty");
-    }
-    else{
+    // if(top==-1){
+    //     printf("Empty");
+    // }
+    // else{
        char item=stack[top];
        top--;
        return item;
-    }
+    // }
     
 }
 int isoperator(char ch){
@@ -55,23 +55,7 @@ char peek(){
     }
 }
 void infixToPostfix(char str[]){
-    int m=strlen(str);
-    int c=0;
-    for(int i=0;i<m;i++){
-        if(isoperator(str[i])==0){
-            postfix[c]=str[i];
-            c++;
-
-        }
-        else{
-            while(precedence(peek())>=str[i]){
-                char p=pop();
-                postfix[c]=p;
-                c++;
-            }
-            push(str[i]);
-        }
-    }
+    
 }
 int main(){
     char str[20];
