@@ -4,63 +4,62 @@ struct node{
     int data;
     struct node *left;
     struct node *right;
+
 };
-
-
 struct node *create(int x){
     struct node *newnode=(struct node *)malloc(sizeof(struct node));
     newnode->data=x;
     newnode->right=newnode->left=NULL;
     return newnode;
-    }
+}
 void insert(struct node *root,struct node *newnode){
-    if(root->data>newnode->data){
-        if(root->left!=NULL){
-            insert(root->left,newnode);
-        }
-        else{
-            root->left=newnode;
-        }
-    }
     if(root->data<newnode->data){
-        if(root->right!=NULL){
-            insert(root->right,newnode);
-        }
-        else{
+        if(root->right==NULL){
             root->right=newnode;
         }
+        else{
+            insert(root->right,newnode);
+        }
     }
+    if(root->data>newnode->data){
+        if(root->left==NULL){
+            root->left=newnode;
+        }
+        else{
+            insert(root->left,newnode);
+        }
+    }
+}
+struct node *inOrderPredecessor(struct node *root){
+    root=root->left;
+    while(root->right!=NULL){
+        root=root->right;
+    }
+    return root;
 }
 struct node *delete(struct node *root, int value){
     struct node *ipre;
     if(root==NULL){
         return NULL;
     }
-    if(root->right==NULL&&root->left==NULL){
+    if(root->left==NULL&&root->right==NULL){
         free(root);
     }
     else{
-        if(value<root->data){
+        if(root->data>value){
             delete(root->left,value);
         }
-        else if(value>root->data){
+        else if(root->data<value){
             delete(root->right,value);
         }
         else{
-            ipre= inOrderPredecessor(root);
-            root->data = ipre->data;
-            deleteNode(root->left, ipre->data);
+            ipre=inOrderPredecessor(root);
+            root->data=ipre->data;
+            delete(root->left, ipre->data);
         }
     }
 }
-struct node * inOrderPredecessor(struct node *root){
-    root = root->left;
-    while (root->right!=NULL)
-    {
-        root = root->right;
-    }
-    return root;
-}
+
 void inorder(struct node *root){
     if(root==NULL){
         return;
@@ -68,30 +67,13 @@ void inorder(struct node *root){
     inorder(root->left);
     printf("\nData: %d",root->data);
     inorder(root->right);
-
-}
-void preorder(struct node *root){
-    if(root==NULL){
-        return;
-    }
-    printf("\nData: %d",root->data);
-    preorder(root->left);
-    preorder(root->right);
-}
-void postorder(struct node *root){
-    if(root==NULL){
-        return;
-    }
-    postorder(root->left);
-    postorder(root->right);
-    printf("\nData: %d",root->data);
 }
 
 int main(){
-    struct node*root=NULL;
+    struct node *root=NULL;
     int state=0;
     while(state==0){
-        printf("\n1. insert 2. inorder 3 preorder 4. postorder 5.delete 6. exit: \n");
+        printf("1. insert 2. delete 3. inorder 4. exit");
         int ch;
         scanf("%d",&ch);
         switch(ch){
@@ -102,7 +84,6 @@ int main(){
                 struct node *newnode=create(item);
                 if(root==NULL){
                     root=newnode;
-
                 }
                 else{
                     insert(root,newnode);
@@ -110,25 +91,18 @@ int main(){
                 break;
             }
             case 2:{
-                inorder(root);
-                break;
-            }
-            case 3:{
-                preorder(root);
-                break;
-            }
-            case 4:{
-                postorder(root);
-                break;
-            }
-            case 5:{
-                printf("Enter the element to be deleted: ");
+                printf("Enter the value to be deleted: ");
                 int item;
                 scanf("%d",&item);
                 delete(root,item);
                 break;
+
             }
-            case 6:{
+            case 3:{
+                inorder(root);
+                break;
+            }
+            case 4:{
                 state=1;
                 break;
             }
