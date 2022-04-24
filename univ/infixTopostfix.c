@@ -34,14 +34,7 @@ int precedence(char ch){
     }
     
 }
-int isParen(char ch){
-    if(ch=='{'||ch=='['||ch=='('||ch=='}'|ch==']'||ch==')'){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
+
 int isOperator(char ch){
     if(ch=='+'||ch=='*'||ch=='/'||ch=='^'||ch=='%'||ch=='-'){
         return 1;
@@ -51,24 +44,28 @@ int isOperator(char ch){
     }
 }
 void infixToPostfix(char exp[],int n){
-    for(int i=0;i<n;i++){
-        if(isOperator(exp[i])==0){
-            printf("%c",exp[i]);
-        }
-        else{
+    int i;
+    for(i=0;i<n;i++){
+        if(isOperator(exp[i])==1){
             if(top==-1){
-                push((char)exp[i]);
-
+                push(exp[i]);
             }
-            else{
-                if(precedence(stack[top])>=exp[i]){
-                    while(precedence(stack[top])>=exp[i]){
-                        char item=pop();
-                        printf("%c",item);
-                    }
-                    push(exp[i]);
+            else if(precedence(stack[top])>=exp[i]){
+                while(precedence(stack[top])>=exp[i]){
+                    char item=pop();
+                    
                 }
             }
+            else{
+
+            }
+
+        }
+        else if(exp[i]=='('||exp[i]==')'){
+
+        }
+        else{
+            pritnf("%c",exp[i]);
         }
     }
 }
