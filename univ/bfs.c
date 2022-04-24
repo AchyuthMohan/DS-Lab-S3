@@ -1,70 +1,81 @@
-#include <stdio.h>
-struct vertex{
-int num;
-int visit;
-}Q[50],v[50],t;
+#include<stdio.h>
 
-int adj[50][50],n,f=-1,r=-1;
-void addq(struct vertex v)
-{
-r++;
-Q[r]=v;
-}
-struct vertex deleteq()
-{
-++f;
-return(Q[f]);
-}
-int qempty()
-{
-if(f==r) return 1;else return 0;
-}
-void bfs()
-{ int i;
-    addq(v[1]);v[1].visit=1;
-    while(!qempty())
-    {
-    t=deleteq();
-    
-    printf("V%d-------->",t.num);
-   
-     for(i=1;i<=n;i++) if(adj[t.num][i]==1 && v[i].visit==0) {addq(v[i]);v[i].visit=1;}
-  }
+#include<conio.h>
+
+int a[20][20], q[20], visited[20], n, i, j, f = 0, r = -1;
+
+void bfs(int v) {
+
+for(i = 1; i <= n; i++)
+
+if(a[v][i] && !visited[i])
+
+q[++r] = i;
+
+if(f <= r) {
+
+visited[q[f]] = 1;
+
+bfs(q[f++]);
+
 }
 
-void read()
-{ int ad,i;
-printf("Enter the Number of vertices\n");
+}
+
+void main() {
+
+
+
+int v;
+
+printf("Enter the number of vertices: ");
+
 scanf("%d",&n);
 
-for(i=1;i<=n;i++) {v[i].num=i;v[i].visit=0;}
-for(i=1;i<=n;i++)
-{
-    printf("Enter the list of vertices adjacent to v%d -1 to stop\n",i);
-    while(1)
-   {
-    scanf("%d",&ad);
-    if(ad==-1) break;
-    adj[i][ad]=1;
-    }
-}
-}
-void disp()
-{
-printf("Adjacency Matrix..\n");
-for(int i=1;i<=n;i++)
-{
-for(int j=1;j<=n;j++)
-    printf("%5d",adj[i][j]);
-printf("\n");
-}
-}
-int main()
-{
-read();
-disp();
-printf("Breadth First Search Result\n");
-bfs();
-return 0;
+for(i=1; i <= n; i++) {
+
+q[i] = 0;
+
+visited[i] = 0;
+
 }
 
+printf("\nEnter graph data in matrix form:\n");
+
+for(i=1; i<=n; i++) {
+
+for(j=1;j<=n;j++) {
+
+scanf("%d", &a[i][j]);
+
+}
+
+}
+
+printf("Enter the starting vertex: ");
+
+scanf("%d", &v);
+
+bfs(v);
+
+printf("\nThe node which are reachable are:");
+
+for(i=1; i <= n; i++) {
+
+if(visited[i])
+
+printf(" %d", i);
+
+else {
+
+printf("\nBFS is not possible. All nodes are not reachable!");
+
+break;
+
+}
+
+}
+
+getch();
+
+}
