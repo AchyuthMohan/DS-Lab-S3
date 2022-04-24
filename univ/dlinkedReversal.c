@@ -24,23 +24,17 @@ void insert(int x){
     }
 }
 void reversal(){
-    struct node *currentnode=head,*nextnode=head,*prevnode=NULL;
-    // struct node *initHead=head;
-    if(head==NULL){
-        printf("Empty...");
+    struct node *ptr1=head,*ptr2=ptr1->next;
+    ptr1->next=NULL;
+    ptr1->prev=ptr2;
+    while(ptr2!=NULL){
+        ptr2->prev=ptr2->next;
+        ptr2->next=ptr1;
+        ptr1=ptr2;
+        ptr2=ptr2->prev;
+
     }
-    else{
-        while(nextnode!=NULL){
-            nextnode=nextnode->next;
-            currentnode->next=currentnode->prev;
-            currentnode->prev=nextnode;
-            // prevnode=currentnode;
-            currentnode=nextnode;
-        }
-        struct node *temp=head;
-        head=tail;
-        tail=temp;
-    }
+    head=ptr1;
 }
 void display(){
     if(head==NULL){
@@ -49,7 +43,7 @@ void display(){
     else{
         struct node *temp=head;
         while(temp!=NULL){
-            printf("\nData: %d",temp->data);
+            printf("Data: %d\n",temp->data);
             temp=temp->next;
         }
     }
