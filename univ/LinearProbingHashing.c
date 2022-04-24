@@ -16,13 +16,20 @@ void insert(int x){
             int loc=(key+i)%size;
             if(l[loc]==-1){
                 l[key+i]=x;
+                break;
             }
         }
     }
 }
 void printer(){
     for(int i=0;i<size;i++){
-        printf("%d\t",l[i]);
+        if(l[i]==-1){
+            printf("_");
+        }
+        else{
+            printf("%d\t",l[i]);
+        }
+        
     }
 }
 int main(){
